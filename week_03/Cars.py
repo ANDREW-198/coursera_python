@@ -46,14 +46,34 @@ def get_car_list(csv_filename): #FIX MI
         for row in reader:
             try:
                 if row[0] in list_car_type and len(row[1]) != 0 and os.path.splitext(row[3])[1] in list_photo_type and len(row[5]) != 0:
-                    print(row)
+                    if row[0] == list_car_type[0]: #Truck
+                        car_list.append(Car(row[1], row[3], float(row[5]), int(row[2])))
+
+                    elif row[0] == list_car_type[1]: #Truck
+                        if len(row[4]) == 0:
+                            car_list.append(Truck(row[1], row[3], float(row[5])))
+                        else:
+                            car_list.append(Truck(row[1], row[3], float(row[5]), row[4]))
+
+                    elif row[0] == list_car_type[2]: #spec_machine
+                        if len(row[6]) != 0:
+                            car_list.append(SpecMachine(row[1], row[3], float(row[5]), row[6]))
+                        else:
+                            continue
+                    else:
+                        print('something wrong')
+
                 else:
                     continue
             except IndexError:
+                continue
+
+            except ValueError:
                 continue
 
 
 
     return car_list
 
-get_car_list('coursera_week3_cars.csv')
+if __name__ == '__main__':
+    print(get_car_list('coursera_week3_cars.csv'))
